@@ -716,7 +716,7 @@
         justify-content: center;
         padding: calc(var(--nav-h) + 3rem) 3rem 4rem 5%;
         position: relative;
-        z-index: 1;
+        z-index: 2;
       }
       .hero-eyebrow {
         font-family: var(--font-body);
@@ -798,6 +798,51 @@
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      /* ---- Mobile: hero image as full-bleed background ---- */
+      @media (max-width: 1024px) {
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: 100svh;
+        }
+        .hero-right {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          display: block !important;
+        }
+        .hero-right .hero-overlay {
+          background: linear-gradient(
+            160deg,
+            rgba(18, 0, 24, 0.88) 0%,
+            rgba(18, 0, 24, 0.68) 55%,
+            rgba(18, 0, 24, 0.5) 100%
+          );
+        }
+        .hero-left {
+          position: relative;
+          z-index: 2;
+          padding: calc(var(--nav-h) + 3.5rem) 1.5rem 5.5rem;
+          min-height: 100svh;
+        }
+        .hero-logo-bg {
+          display: none;
+        }
+        .hero-sub {
+          max-width: 100%;
+        }
+      }
+      @media (max-width: 480px) {
+        .hero-headline {
+          font-size: clamp(2.4rem, 10vw, 3.6rem);
+        }
+        .hero-ctas {
+          flex-direction: column;
+        }
+        .hero-ctas .btn {
+          width: 100%;
+          justify-content: center;
+        }
       }
       .hero-img-placeholder {
         width: 100%;
@@ -990,12 +1035,73 @@
       .dress-card-img .img-placeholder {
         min-height: 280px;
       }
-      .dress-card:hover .dress-card-img .img-placeholder {
-        transform: scale(1.05);
-        transition: transform 0.5s ease;
+      .dress-card-img img {
+        transition: transform 0.38s ease;
       }
       .dress-card:hover .dress-card-img img {
-        transform: scale(1.05);
+        transform: scale(1.08);
+      }
+      .dress-card:hover .dress-card-img .img-placeholder {
+        transform: scale(1.08);
+        transition: transform 0.38s ease;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .dress-card-img img,
+        .dress-card-img .img-placeholder {
+          transition: none !important;
+          transform: none !important;
+        }
+      }
+      /* Frosted-glass hover badge — featured collection & shop cards */
+      .dress-card-hover-badge,
+      .shop-card-hover-badge {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(18, 0, 24, 0.52);
+        backdrop-filter: blur(10px) saturate(1.5);
+        -webkit-backdrop-filter: blur(10px) saturate(1.5);
+        border-top: 1px solid rgba(255, 255, 255, 0.13);
+        padding: 0.6rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        opacity: 0;
+        transform: translateY(8px);
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
+        z-index: 3;
+        pointer-events: none;
+      }
+      .dress-card:hover .dress-card-hover-badge,
+      .shop-card:hover .shop-card-hover-badge {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .dress-card-hover-badge,
+        .shop-card-hover-badge {
+          transition: none;
+        }
+      }
+      .dress-card-hover-badge .hb-price,
+      .shop-card-hover-badge .hb-price {
+        font-family: var(--font-display);
+        font-size: 1.1rem;
+        color: var(--brand-gold);
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .dress-card-hover-badge .hb-occasion,
+      .shop-card-hover-badge .hb-occasion {
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.8);
+        letter-spacing: 0.03em;
+        text-align: right;
+        line-height: 1.4;
       }
       .price-badge {
         position: absolute;
@@ -1008,6 +1114,7 @@
         font-weight: 600;
         padding: 0.3rem 0.75rem;
         border-radius: 100px;
+        z-index: 4;
       }
       .dress-card-body {
         padding: 1.25rem;
@@ -1480,10 +1587,23 @@
       }
       .shop-card-img .img-placeholder {
         min-height: 300px;
-        transition: transform 0.5s ease;
+        transition: transform 0.38s ease;
       }
       .shop-card:hover .shop-card-img .img-placeholder {
-        transform: scale(1.05);
+        transform: scale(1.08);
+      }
+      .shop-card-img img {
+        transition: transform 0.38s ease;
+      }
+      .shop-card:hover .shop-card-img img {
+        transform: scale(1.08);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .shop-card-img img,
+        .shop-card-img .img-placeholder {
+          transition: none !important;
+          transform: none !important;
+        }
       }
       .wishlist-btn {
         position: absolute;
@@ -1508,19 +1628,6 @@
       }
       .wishlist-btn:hover {
         transform: scale(1.1);
-      }
-      .quick-view-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(26, 0, 26, 0.6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-      .shop-card:hover .quick-view-overlay {
-        opacity: 1;
       }
       .shop-card-body {
         padding: 1.25rem;
@@ -2575,6 +2682,20 @@
         transform: translateY(-4px);
         box-shadow: var(--shadow-lg);
       }
+      .gallery-masonry .gallery-item img {
+        transition: transform 0.38s ease;
+        width: 100%;
+        display: block;
+      }
+      .gallery-masonry .gallery-item:hover img {
+        transform: scale(1.08);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .gallery-masonry .gallery-item img {
+          transition: none !important;
+          transform: none !important;
+        }
+      }
       .gallery-masonry .gallery-item .img-placeholder {
         width: 100%;
         min-height: unset;
@@ -3172,15 +3293,6 @@
        18. RESPONSIVE
     ============================================================ */
       @media (max-width: 1024px) {
-        .hero {
-          grid-template-columns: 1fr;
-        }
-        .hero-right {
-          display: none;
-        }
-        .hero-left {
-          padding: calc(var(--nav-h) + 2rem) 1.5rem 4rem;
-        }
         .about-grid,
         .founder-grid {
           grid-template-columns: 1fr;
@@ -3272,19 +3384,18 @@
           flex: unset;
           width: 100%;
         }
-        .hero-ctas {
-          flex-direction: column;
-        }
-        .hero-ctas .btn {
-          width: 100%;
-          justify-content: center;
-        }
         .whatsapp-fab {
           bottom: 1.25rem;
           right: 1rem;
           width: 52px;
           height: 52px;
           font-size: 1.3rem;
+        }
+        /* Touch: always show frosted badge on mobile (no hover) */
+        .dress-card-hover-badge,
+        .shop-card-hover-badge {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
 
@@ -4305,14 +4416,13 @@
                   src="https://images.unsplash.com/photo-1745669702821-b994a8b9ad78?w=600&amp;q=80&amp;fit=crop&amp;crop=faces"
                   alt="Elegant Nigerian woman in Ankara bridal gown"
                   loading="lazy"
-                  style="
-                    width: 100%;
-                    height: 280px;
-                    object-fit: cover;
-                    transition: transform 0.5s ease;
-                  "
+                  style="width: 100%; height: 280px; object-fit: cover"
                 />
                 <div class="price-badge">₦85,000</div>
+                <div class="dress-card-hover-badge" aria-hidden="true">
+                  <span class="hb-price">₦85,000</span
+                  ><span class="hb-occasion">Wedding<br />Ladies</span>
+                </div>
               </div>
               <div class="dress-card-body">
                 <h3 class="dress-name">Regal Ankara Bride</h3>
@@ -4333,14 +4443,13 @@
                   src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&amp;q=80&amp;fit=crop&amp;crop=faces"
                   alt="Stylish woman in chiffon birthday party dress"
                   loading="lazy"
-                  style="
-                    width: 100%;
-                    height: 280px;
-                    object-fit: cover;
-                    transition: transform 0.5s ease;
-                  "
+                  style="width: 100%; height: 280px; object-fit: cover"
                 />
                 <div class="price-badge">₦35,000</div>
+                <div class="dress-card-hover-badge" aria-hidden="true">
+                  <span class="hb-price">₦35,000</span
+                  ><span class="hb-occasion">Birthday<br />Teens / Ladies</span>
+                </div>
               </div>
               <div class="dress-card-body">
                 <h3 class="dress-name">Chiffon Party Bliss</h3>
@@ -4361,14 +4470,13 @@
                   src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&amp;q=80&amp;fit=crop&amp;crop=faces"
                   alt="Young girl in charming kids event princess gown"
                   loading="lazy"
-                  style="
-                    width: 100%;
-                    height: 280px;
-                    object-fit: cover;
-                    transition: transform 0.5s ease;
-                  "
+                  style="width: 100%; height: 280px; object-fit: cover"
                 />
                 <div class="price-badge">₦18,000</div>
+                <div class="dress-card-hover-badge" aria-hidden="true">
+                  <span class="hb-price">₦18,000</span
+                  ><span class="hb-occasion">Kids Event<br />Ages 3–12</span>
+                </div>
               </div>
               <div class="dress-card-body">
                 <h3 class="dress-name">Little Princess Gown</h3>
@@ -7744,18 +7852,18 @@
       <div class="shop-card-img">
         ${
           item.img
-            ? `<img src="${item.img}" alt="${item.alt || item.name}" loading="lazy" style="width:100%;height:300px;object-fit:cover;display:block;transition:transform 0.5s ease;" />`
+            ? `<img src="${item.img}" alt="${item.alt || item.name}" loading="lazy" style="width:100%;height:300px;object-fit:cover;display:block;" />`
             : `<div class="img-placeholder" role="img" aria-label="${item.name}"><span style="font-size:4rem;">👗</span></div>`
         }
         <button class="wishlist-btn${wishlist.includes(item.id) ? " active" : ""}" onclick="toggleWishlist('${item.id}', this)" data-item-id="${item.id}" aria-label="${wishlist.includes(item.id) ? "Remove from wishlist" : "Add to wishlist"}" aria-pressed="${wishlist.includes(item.id)}">
           <i class="fa-${wishlist.includes(item.id) ? "solid" : "regular"} fa-heart" aria-hidden="true"></i>
         </button>
         <div class="price-badge" aria-label="Price">${item.price}</div>
-        <div class="quick-view-overlay" aria-hidden="true">
-          <span style="color:var(--white);font-size:0.85rem;font-weight:500;background:rgba(0,0,0,0.5);padding:0.4rem 0.875rem;border-radius:100px;">Quick View</span>
+        <div class="shop-card-hover-badge" aria-hidden="true">
+          <span class="hb-price">${item.price}</span>
+          <span class="hb-occasion">${item.occasion.replace(" · ", "<br>")}</span>
         </div>
       </div>
-      <style>.shop-card:hover .shop-card-img img { transform: scale(1.05); }</style>
       <div class="shop-card-body">
         <h3 class="dress-name">${item.name}</h3>
         <p class="dress-occasion">${item.occasion}</p>
@@ -9493,6 +9601,13 @@ _Adenike — Nikkiebella Couture_ 🧵`;
 
       // Reveal on scroll for active view
       window.addEventListener("scroll", initReveal, { passive: true });
+    </script>
+    <script>
+      window.onload = function () {
+        var d = document.createElement("div");
+        d.id = "appLoadFinished";
+        document.body.appendChild(d);
+      };
     </script>
     <script>
       window.onload = function () {
